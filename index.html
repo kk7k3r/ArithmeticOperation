@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Арифметика</title>
+</head>
+<body>
+    <div class="container">
+        <div id="page1" class="page1">
+            <h1 class="h1">Арифметические операции</h1>
+            <form class="form" action="" method="get">
+                <label class="inputLabel">Введите ваше ФИО:
+                    <input class="inputName" type="text" name="name" required>
+                </label>
+                <label class="inputLabel">Введите кол-во прогонов:
+                    <input class="inputTries" type="number" step="any" name="tries" required min="1" max="3">
+                </label>
+                <button type="submit">Далее</button>
+            </form>
+        </div>
+        <div id="page2" class="page2">
+            <h2 class="h2">Задача</h2>
+            <p class="dividingOnZero" style="font-size: 18px; color: #666;">Обнаружено деление на 0</p>
+            <form class="form2" action="" method="get">
+                <span class="midResult"></span>
+                <p class="field">
+                    <span class="equation"></span>
+                    &nbsp;=&nbsp;<input class="answer" type="number"><sub class="subValue3">1</sub>
+                </p>
+                <div style="display: flex; justify-content: center; column-gap: 5px;">
+                    <button class="btnTry1More" type="submit">Ещё раз</button>
+                    <button class="btnNext" style="display: none;" type="button">Далее</button>
+                </div>
+            </form>
+        </div>
+        <div id="page3" class="page3">
+            <h2 class="h2">Результаты</h2>
+            <table border="10" style="margin-bottom: 10px;">
+                <thead>
+                    <th class="tryNumber">Попытка №</th>
+                    <th class="userAnswer">Ваш ответ</th>
+                    <th class="correctAnswer">Правильный ответ</th>
+                    <th class="result">Результат</th>
+                </thead>
+                <tbody>
+                    <tr class="tr1">
+                        <td class="tdNumber1">1</td>
+                        <td class="tdAnswer1">0</td>
+                        <td class="corrAnswer1">0</td>
+                        <td class="tdResult1">0</td>
+                    </tr>
+                    <tr class="tr2" style="display: none;">
+                        <td class="tdNumber2">2</td>
+                        <td class="tdAnswer2">0</td>
+                        <td class="corrAnswer2">0</td>
+                        <td class="tdResult2">0</td>
+                    </tr>
+                    <tr class="tr3" style="display: none;">
+                        <td class="tdNumber3">3</td>
+                        <td class="tdAnswer3">0</td>
+                        <td class="corrAnswer3">0</td>
+                        <td class="tdResult3">0</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>Оценка: <span class="mark"></span></p>
+            <form class="form3" action="" method="get" style="display: flex; ">
+                <label class="inputLabel" style="display: flex;">
+                    Напишите комментарий:
+                    <textarea class="txtArea" name="" id="" cols="30" rows="10"></textarea>
+                </label>
+                <p class="success-after-save-comment">Файл сохранён</p>
+                <button type="submit">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</body>
+<style>
+
+   .container {
+        padding: 10px;
+        min-height: 170px;
+        max-width: 380px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 15%;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+    }
+    .form,
+    .form3 {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    #page2,
+    #page3 {
+        display: none;
+    }
+    .h1{
+        font-size: 2.5em;
+        font-weight: 100;
+        color: #292929;
+    }
+    .inputName{
+        width: 40%;
+        height: 24px;
+        color: #292929;
+    }
+    .inputTries{
+        width: 20%;
+        height: 24px;
+        color: #292929;
+    }
+    button{
+        margin-top: 2%;
+        width: 100px;
+        height: 40px;
+        margin-left: auto;
+        margin-right: auto;
+        background: #4078e1;
+        color: aliceblue;
+        border: #4078e1;
+        font-size: 1em;
+    }
+    .inputLabel{
+        font-size: 1.5em;
+        font-weight: 100;
+        color: #292929;
+    }
+    .h2{
+        font-size: 2.0em;
+        font-weight: 100; 
+        color: #292929;
+    }
+    p{
+        font-size: 1.5em;
+        color: #292929;
+    }
+    .answer{
+        height: 24px;
+        color: #292929;
+        width: 120px;
+    }
+    td {
+        padding: 10px;
+        border: 1px solid #4078e1;
+        font-size: 1em;
+    }
+    table {
+        border: 3px solid #4078e1;
+        border-collapse: collapse;
+        font-size: 1em;
+        color: #292929;
+    }
+    th {
+        border: 1px solid #4078e1;
+        font-size: 1em;
+    }
+    .txtArea {
+        resize: vertical;
+    }
+    .success-after-save-comment {
+        display: none;
+    }
+    .dividingOnZero {
+        display: none;
+    }
+
+   
+</style>
+</html>
