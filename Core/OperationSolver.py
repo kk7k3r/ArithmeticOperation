@@ -1,4 +1,4 @@
-import BasedNumber
+from Core import BasedNumber
 
 
 class OperationSolver:

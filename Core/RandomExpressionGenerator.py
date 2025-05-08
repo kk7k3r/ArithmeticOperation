@@ -1,6 +1,7 @@
 ﻿import random
-import Node
-from BasedNumber import BasedNumber
+from Core import Node
+from Core.BasedNumber import BasedNumber
+
 
 class RandomExpressionGenerator:
     def __init__(self):
