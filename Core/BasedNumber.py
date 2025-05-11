@@ -30,4 +30,4 @@
         return self.value
 
     def __str__(self):
-        return f"{self.value} (base {self.base})"
+        return f"<span>{self.value}</span><sub>{self.base}</sub>)"

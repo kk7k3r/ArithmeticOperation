@@ -9,7 +9,7 @@
 <div class="container">
     <div id="page1" class="page1">
         <h1 class="h1">Арифметические операции</h1>
-        <form class="form" action="" method="get">
+        <form id="form1" class="form">
             <label class="inputLabel">Введите ваше ФИО:
                 <input class="inputName" type="text" name="name" required>
             </label>
@@ -22,7 +22,7 @@
     <div id="page2" class="page2">
         <h2 class="h2">Задача</h2>
         <p class="dividingOnZero" style="font-size: 18px; color: #666;">Обнаружено деление на 0</p>
-        <form class="form2" action="" method="get">
+        <form class="form2" id="form2" action="" method="get">
             <span class="midResult"></span>
             <p class="field">
                 <span class="equation"></span>
@@ -36,7 +36,7 @@
     </div>
     <div id="page3" class="page3">
         <h2 class="h2">Результаты</h2>
-        <table border="10" style="margin-bottom: 10px;">
+        <table border="10" id="resultsTable" style="margin-bottom: 10px;">
             <thead>
             <th class="tryNumber">Попытка №</th>
             <th class="userAnswer">Ваш ответ</th>
@@ -186,7 +186,99 @@
     .dividingOnZero {
         display: none;
     }
-
-
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let name = '';
+        let tries = 0;
+        let currentTry = 1;
+        let correctAnswer = '';
+        let equation = '';
+
+        const form1 = document.getElementById('form1');
+        const form2 = document.getElementById('form2');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const resultsTable = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
+        const equationText = document.querySelector('.equation');
+        const inputAnswer = document.getElementById('answer');
+
+        form1.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            name = document.querySelector('.inputName').value;
+            tries = document.querySelector('.inputTries').value;
+
+            const response = await fetch('/generate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({name, tries})
+            });
+
+            const data = await response.json();
+            equation = data.equation;
+            correctAnswer = data.correctAnswer;
+
+            equationText.textContent = equation;
+            page1.style.display = 'none';
+            page2.style.display = 'block';
+        });
+
+        form2.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const userAnswer = inputAnswer.value;
+
+            const response = await fetch('/check_answer', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({answer: userAnswer, correctAnswer})
+            });
+            const data = await response.json();
+
+            const row = resultsTable.insertRow();
+            row.insertCell(0).textContent = currentTry;
+            row.insertCell(1).textContent = userAnswer;
+            row.insertCell(2).textContent = correctAnswer;
+
+            if (currentTry < tries) {
+                currentTry++;
+                equationText.textContent = data.newEquation; // New equation for next try
+                correctAnswer = data.newCorrectAnswer;
+            } else {
+                page2.style.display = 'none';
+                page3.style.display = 'block';
+            }
+        });
+
+        function formHandler(e) {
+            e.preventDefault();
+            name = inputName.value;
+            tries = inputTries.value;
+            page1.style.display = 'none';
+            page2Handler(); // начинается генерация задания
+        }
+
+        function page2Handler() {
+            page2.style.display = 'block';
+
+            fetch('http://localhost:5000/generate')
+                .then(response => response.json())
+                .then(data => {
+                    const {expression, result, base} = data;
+
+                    // Показываем выражение
+                    equationText.innerHTML = expression.replace(/_(\d+)/g, (_, base) => `<sub>${base}</sub>`);
+
+                    // Сохраняем правильный ответ
+                    correctAnswer = result;
+                    subValue3.textContent = base;
+                })
+                .catch(err => {
+                    equationText.innerHTML = "Ошибка получения выражения";
+                    console.error("Ошибка:", err);
+                });
+        }
+    });
+
+
+</script>
 </html>

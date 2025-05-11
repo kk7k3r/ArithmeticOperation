@@ -1,5 +1,5 @@
 ﻿import random
-from Core import Node
+from Core.Node import Node
 from Core.BasedNumber import BasedNumber
 
 
@@ -26,14 +26,14 @@ class RandomExpressionGenerator:
     def build_subtree(self, depth, stack):
         child = Node(None)
         if random.choice(['operation', 'number']) == 'operation' and depth <= self.max_depth:
-            child.value = self.get_random_operation()
+            child.value = self.getRandomOperation()
             stack.append((child, depth + 1))
         else:
-            child.value = self.get_random_number()
+            child.value = self.getRandomOperation()
         return child
 
-    def create_tree(self):
-        root = Node(self.get_random_operation())
+    def generate_expression(self):
+        root = Node(self.getRandomOperation())
         stack = [(root, 1)]
 
         while stack:
