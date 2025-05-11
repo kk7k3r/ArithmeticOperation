@@ -1,7 +1,8 @@
 ﻿from flask import Blueprint, render_template, request, redirect, url_for, jsonify
-from Core.RandomExpressionGenerator import RandomExpressionGenerator
+from core.random_expression_generator import RandomExpressionGenerator
 
 controllers = Blueprint("controllers", __name__)
+
 
 @controllers.route('/')
 def index():
@@ -16,12 +17,13 @@ def generate_expression():
     expression_generator = RandomExpressionGenerator()
     expression = expression_generator.generate_expression()
     correct_answer = 1
-    base=10
+    base = 10
     return jsonify({
         "equation": str(expression),
         "correctAnswer": str(correct_answer),
         "base": base
     })
+
 
 @controllers.route('/check_answer', methods=['POST'])
 def check_answer():
