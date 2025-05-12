@@ -1,5 +1,6 @@
 ﻿from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from core.random_expression_generator import RandomExpressionGenerator
+from core.expression_renderer import ExpressionRenderer
 
 controllers = Blueprint("controllers", __name__)
 
@@ -16,7 +17,7 @@ def generate_expression():
     tries = int(data.get('tries'))
     expression_generator = RandomExpressionGenerator()
     expression_tree = expression_generator.generate_expression_tree()
-    expression = expression_generator.get_expression(expression_tree)
+    expression = ExpressionRenderer.render(expression_tree)
     correct_answer = 1
     base = 10
     return jsonify({

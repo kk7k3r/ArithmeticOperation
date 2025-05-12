@@ -42,6 +42,3 @@
         digits.reverse()
         s = ''.join(digits)
         return BasedNumber('-' + s if is_negative else s, base)
-
-    def __str__(self):
-        return f"(<span>{self.value}</span><sub>{self.base}</sub>)"

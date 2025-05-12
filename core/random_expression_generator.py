@@ -6,7 +6,7 @@ from core.node import Node
 class RandomExpressionGenerator:
     def __init__(self, max_depth=5):
         self.operations = ['+', '-', '*', '/']
-        self.max_depth = max_depth # Максимальная глубина дерева
+        self.max_depth = max_depth  # Максимальная глубина дерева
 
     def get_random_operation(self):
         """Получение случайной операции"""
@@ -25,29 +25,28 @@ class RandomExpressionGenerator:
         return random.choice(seq)
 
     def generate_expression_tree(self, depth=1):
-        if depth > self.max_depth or random:
+        """
+           Рекурсивно создаёт дерево выражения, где:
+           - внутренние узлы — операции
+           - листья — числа в случайной системе счисления
+           """
+        # Если достигнута максимальная глубина — создаём число
+        if depth > self.max_depth:
             return Node(self.get_random_number())
 
-        node = Node()
-        node.value = self.get_random_operation()
+        # Создаём узел с операцией
+        node = Node(self.get_random_operation())
 
+        # Левый потомок
         if random.choice(['operation', 'number']) == 'operation' and depth < self.max_depth:
             node.left = self.generate_expression_tree(depth + 1)
         else:
             node.left = Node(self.get_random_number())
 
+        # Правый потомок
         if random.choice(['operation', 'number']) == 'operation' and depth < self.max_depth:
             node.right = self.generate_expression_tree(depth + 1)
         else:
             node.right = Node(self.get_random_number())
 
         return node
-
-    def get_expression(self, node):
-        if isinstance(node.value, str) and node.value in ['+', '-', '*', '/']:
-            left_expr = self.get_expression(node.left)
-            right_expr = self.get_expression(node.right)
-            return f"({left_expr} {node.value} {right_expr})"
-
-        return str(node.value)
-
