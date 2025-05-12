@@ -15,11 +15,12 @@ def generate_expression():
     name = data.get('name')
     tries = int(data.get('tries'))
     expression_generator = RandomExpressionGenerator()
-    expression = expression_generator.generate_expression()
+    expression_tree = expression_generator.generate_expression_tree()
+    expression = expression_generator.get_expression(expression_tree)
     correct_answer = 1
     base = 10
     return jsonify({
-        "equation": str(expression),
+        "equation": expression,
         "correctAnswer": str(correct_answer),
         "base": base
     })

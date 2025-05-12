@@ -7,4 +7,5 @@
         self.right = None
 
     def __str__(self):
-        return str(f"{str(self.left)} {self.value} {str(self.right)}")
+        return (f"{str(self.left) if self.left is not None else ''} "
+                f"{self.value} {str(self.right) if self.right is not None else ''}")

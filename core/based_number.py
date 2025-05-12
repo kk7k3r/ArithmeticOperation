@@ -29,5 +29,19 @@
             return int(self.value), int(self.base)
         return self.value
 
+    @staticmethod
+    def from_decimal(value: int, base: int):
+        digits = []
+        is_negative = value < 0
+        value = abs(value)
+        if value == 0:
+            return BasedNumber('0', base)
+        while value > 0:
+            digits.append("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[value % base])
+            value //= base
+        digits.reverse()
+        s = ''.join(digits)
+        return BasedNumber('-' + s if is_negative else s, base)
+
     def __str__(self):
-        return f"<span>{self.value}</span><sub>{self.base}</sub>)"
+        return f"(<span>{self.value}</span><sub>{self.base}</sub>)"
