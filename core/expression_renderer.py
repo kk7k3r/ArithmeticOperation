@@ -44,4 +44,7 @@ class ExpressionRenderer:
 
     @staticmethod
     def render_based_number(number: BasedNumber):
-        return f"<span>{number.value}</span><sub>{number.base}</sub>"
+        result = f"<span>{number.value}</span><sub>{number.base}</sub>"
+        if str(number.value).startswith("-"):
+            result = f"({result})"
+        return result
