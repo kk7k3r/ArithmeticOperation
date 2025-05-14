@@ -226,6 +226,8 @@
         let answer2 = '';
         let answer3 = '';
 
+        let result1 = 0, result2 = 0, result3 = 0
+
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             name = inputName.value;
@@ -246,17 +248,12 @@
 
         form2.addEventListener('submit', async function (e) {
             e.preventDefault();
-            let date = new Date();
-            let success = 'Правильно';
-            let wrong = 'Неправильно';
             let userAnswer = inputAnswer.value;
 
-            // Сохраняем ответ пользователя
             if (counter === 1) answer1 = userAnswer;
             if (counter === 2) answer2 = userAnswer;
             if (counter === 3) answer3 = userAnswer;
 
-            // Проверяем ответ на бэке
             const response = await fetch('/check_answer', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -264,13 +261,12 @@
             });
             const data = await response.json();
 
-            if (data.correct) {
-                midResult.textContent = success;
-            } else {
-                midResult.textContent = wrong;
-            }
+            if (counter === 1) result1 = data.correct ? 1 : 0;
+            if (counter === 2) result2 = data.correct ? 1 : 0;
+            if (counter === 3) result3 = data.correct ? 1 : 0;
 
-            // Блокируем кнопку если попытки закончились
+            midResult.textContent = data.correct ? 'Правильно' : 'Неправильно';
+
             if (counter >= tries) {
                 btnTry1More.disabled = true;
                 btnTry1More.style.background = '#646262';
@@ -282,17 +278,16 @@
         btnNext.onclick = function () {
             page2.style.display = 'none';
             page3.style.display = 'block';
-            // Заполняем таблицу результатов
             tdAnswer1.textContent = answer1;
             tdAnswer2.textContent = answer2;
             tdAnswer3.textContent = answer3;
             corrAnswer1.textContent = correctAnswer;
             corrAnswer2.textContent = correctAnswer;
             corrAnswer3.textContent = correctAnswer;
-            tdResult1.textContent = (answer1 === correctAnswer) ? 1 : 0;
-            tdResult2.textContent = (answer2 === correctAnswer) ? 1 : 0;
-            tdResult3.textContent = (answer3 === correctAnswer) ? 1 : 0;
-            mark.textContent = ((answer1 === correctAnswer || answer2 === correctAnswer || answer3 === correctAnswer) ? 1 : 0);
+            tdResult1.textContent = result1;
+            tdResult2.textContent = result2;
+            tdResult3.textContent = result3;
+            mark.textContent = (result1 || result2 || result3) ? 1 : 0;
             if (tries >= 2) tr2.style.display = 'table-row';
             if (tries >= 3) tr3.style.display = 'table-row';
         };
