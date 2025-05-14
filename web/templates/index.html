@@ -189,94 +189,131 @@
 </style>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector('.form'),
+            form2 = document.querySelector('.form2'),
+            form3 = document.querySelector('.form3'),
+            page1 = document.querySelector('#page1'),
+            page2 = document.querySelector('#page2'),
+            page3 = document.querySelector('#page3'),
+            inputName = document.querySelector('.inputName'),
+            inputTries = document.querySelector('.inputTries'),
+            inputAnswer = document.querySelector('.answer'),
+            btnTry1More = document.querySelector('.btnTry1More'),
+            btnNext = document.querySelector('.btnNext'),
+            midResult = document.querySelector('.midResult'),
+            equationText = document.querySelector('.equation'),
+            subValue3 = document.querySelector('.subValue3'),
+            tdAnswer1 = document.querySelector('.tdAnswer1'),
+            tdAnswer2 = document.querySelector('.tdAnswer2'),
+            tdAnswer3 = document.querySelector('.tdAnswer3'),
+            corrAnswer1 = document.querySelector('.corrAnswer1'),
+            corrAnswer2 = document.querySelector('.corrAnswer2'),
+            corrAnswer3 = document.querySelector('.corrAnswer3'),
+            tdResult1 = document.querySelector('.tdResult1'),
+            tdResult2 = document.querySelector('.tdResult2'),
+            tdResult3 = document.querySelector('.tdResult3'),
+            tr2 = document.querySelector('.tr2'),
+            tr3 = document.querySelector('.tr3'),
+            mark = document.querySelector('.mark'),
+            txtArea = document.querySelector('.txtArea'),
+            successText = document.querySelector('.success-after-save-comment');
+
         let name = '';
         let tries = 0;
-        let currentTry = 1;
+        let counter = 1;
         let correctAnswer = '';
-        let equation = '';
+        let answer1 = '';
+        let answer2 = '';
+        let answer3 = '';
 
-        const form1 = document.getElementById('form1');
-        const form2 = document.getElementById('form2');
-        const page2 = document.getElementById('page2');
-        const page3 = document.getElementById('page3');
-        const resultsTable = document.getElementById('resultsTable').getElementsByTagName('tbody')[0];
-        const equationText = document.querySelector('.equation');
-        const inputAnswer = document.getElementById('answer');
-
-        form1.addEventListener('submit', async function (e) {
+        form.addEventListener('submit', async function (e) {
             e.preventDefault();
-            name = document.querySelector('.inputName').value;
-            tries = document.querySelector('.inputTries').value;
-
+            name = inputName.value;
+            tries = parseInt(inputTries.value);
+            // Получаем выражение и ответ с бэка
             const response = await fetch('/generate', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({name, tries})
             });
-
             const data = await response.json();
-            equation = data.equation;
+            equationText.innerHTML = data.equation;
             correctAnswer = data.correctAnswer;
-
-            equationText.innerHTML = equation;
+            subValue3.textContent = data.base;
             page1.style.display = 'none';
             page2.style.display = 'block';
         });
 
         form2.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const userAnswer = inputAnswer.value;
+            let date = new Date();
+            let success = 'Правильно';
+            let wrong = 'Неправильно';
+            let userAnswer = inputAnswer.value;
 
+            // Сохраняем ответ пользователя
+            if (counter === 1) answer1 = userAnswer;
+            if (counter === 2) answer2 = userAnswer;
+            if (counter === 3) answer3 = userAnswer;
+
+            // Проверяем ответ на бэке
             const response = await fetch('/check_answer', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({answer: userAnswer, correctAnswer})
+                body: JSON.stringify({answer: userAnswer, correct_answer: correctAnswer})
             });
             const data = await response.json();
 
-            const row = resultsTable.insertRow();
-            row.insertCell(0).textContent = currentTry;
-            row.insertCell(1).textContent = userAnswer;
-            row.insertCell(2).textContent = correctAnswer;
-
-            if (currentTry < tries) {
-                currentTry++;
-                equationText.textContent = data.newEquation; // New equation for next try
-                correctAnswer = data.newCorrectAnswer;
+            if (data.correct) {
+                midResult.textContent = success;
             } else {
-                page2.style.display = 'none';
-                page3.style.display = 'block';
+                midResult.textContent = wrong;
             }
+
+            // Блокируем кнопку если попытки закончились
+            if (counter >= tries) {
+                btnTry1More.disabled = true;
+                btnTry1More.style.background = '#646262';
+                btnNext.style.display = 'block';
+            }
+            counter++;
         });
 
-        function formHandler(e) {
+        btnNext.onclick = function () {
+            page2.style.display = 'none';
+            page3.style.display = 'block';
+            // Заполняем таблицу результатов
+            tdAnswer1.textContent = answer1;
+            tdAnswer2.textContent = answer2;
+            tdAnswer3.textContent = answer3;
+            corrAnswer1.textContent = correctAnswer;
+            corrAnswer2.textContent = correctAnswer;
+            corrAnswer3.textContent = correctAnswer;
+            tdResult1.textContent = (answer1 === correctAnswer) ? 1 : 0;
+            tdResult2.textContent = (answer2 === correctAnswer) ? 1 : 0;
+            tdResult3.textContent = (answer3 === correctAnswer) ? 1 : 0;
+            mark.textContent = ((answer1 === correctAnswer || answer2 === correctAnswer || answer3 === correctAnswer) ? 1 : 0);
+            if (tries >= 2) tr2.style.display = 'table-row';
+            if (tries >= 3) tr3.style.display = 'table-row';
+        };
+
+        form3.addEventListener('submit', function (e) {
             e.preventDefault();
-            name = inputName.value;
-            tries = inputTries.value;
-            page1.style.display = 'none';
-            page2Handler(); // начинается генерация задания
-        }
-
-        function page2Handler() {
-            page2.style.display = 'block';
-
-            fetch('http://localhost:5000/generate')
-                .then(response => response.json())
-                .then(data => {
-                    const {expression, result, base} = data;
-
-                    // Показываем выражение
-                    equationText.innerHTML = expression.replace(/_(\d+)/g, (_, base) => `<sub>${base}</sub>`);
-
-                    // Сохраняем правильный ответ
-                    correctAnswer = result;
-                    subValue3.textContent = base;
-                })
-                .catch(err => {
-                    equationText.innerHTML = "Ошибка получения выражения";
-                    console.error("Ошибка:", err);
-                });
-        }
+            const commentValue = `${name}: ${txtArea.value}`;
+            // Скачиваем комментарий как файл
+            var file = new Blob([commentValue], {type: 'txt'});
+            var a = document.createElement("a"),
+                url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = 'Комментарий.txt';
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(function () {
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+            successText.style.display = 'block';
+        });
     });
 
 

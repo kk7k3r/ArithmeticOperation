@@ -26,7 +26,7 @@
 
     def to_decimal(self):
         if self.base != 10 or isinstance(self.value, str):
-            return int(self.value), int(self.base)
+            return int(str(self.value), int(self.base))
         return self.value
 
     @staticmethod

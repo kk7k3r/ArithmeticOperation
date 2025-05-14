@@ -1,27 +1,29 @@
+from core.based_number import BasedNumber
 from core.node import Node
 
 
-class OperationSolver:
+class ExpressionSolver:
     """Класс для выполнения арифметических операций между числами с разными основаниями."""
 
-    def __init__(self):
-        self.operations = ['+', '-', '*', '/']
+    OPERATIONS = ['+', '-', '*', '/']
 
-    def compute(self, a, b, operation):
+    @staticmethod
+    def compute(a: BasedNumber, b: BasedNumber, operation):
         if operation == '+':
-            return a + b
+            return a.add(b)
         elif operation == '-':
-            return a - b
+            return a.sub(b)
         elif operation == '*':
-            return a * b
+            return a.mult(b)
         elif operation == '/':
-            return a / b
+            return a.div(b)
         else:
-            raise ValueError(f"Неизвестная операция: {self.op}")
+            raise ValueError(f"Неизвестная операция: {operation}")
 
-    def compute_expression(self, tree: Node):
-        if tree.value in self.operations:
-            return self.compute(
-                self.compute_expression(tree.left),
-                self.compute_expression(tree.right), tree.value)
+    @staticmethod
+    def compute_expression(tree: Node):
+        if tree.value in ExpressionSolver.OPERATIONS:
+            return ExpressionSolver.compute(
+                ExpressionSolver.compute_expression(tree.left),
+                ExpressionSolver.compute_expression(tree.right), tree.value)
         return tree.value
