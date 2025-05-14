@@ -11,14 +11,31 @@ controllers = Blueprint("controllers", __name__)
 
 @controllers.route('/')
 def index():
+    """
+    Отображает главную страницу приложения.
+
+    Returns:
+        HTML-страница index.html.
+    """
     return render_template('index.html')
 
 
 @controllers.route('/generate', methods=['POST'])
 def generate_expression():
+    """
+    Генерирует случайное арифметическое выражение и вычисляет правильный ответ.
+
+    Ожидает JSON с параметрами:
+        name (str): имя пользователя.
+        tries (int): количество попыток.
+
+    Returns:
+        JSON:
+            equation (str): представление выражения.
+            correctAnswer (float): правильный ответ
+            base (int): основание системы счисления (пока что всегда 10).
+    """
     data = request.get_json()
-    name = data.get('name')
-    tries = int(data.get('tries'))
     expression_generator = RandomExpressionGenerator()
     expression_tree = expression_generator.generate_expression_tree()
     expression = ExpressionRenderer.render(expression_tree)
@@ -33,6 +50,17 @@ def generate_expression():
 
 @controllers.route('/check_answer', methods=['POST'])
 def check_answer():
+    """
+    Проверяет, совпадает ли ответ пользователя с правильным ответом.
+
+    Ожидает JSON с параметрами:
+        answer (str): ответ пользователя.
+        correct_answer (str): правильный ответ.
+
+    Returns:
+        JSON:
+            correct (bool): True, если ответ верный, иначе False.
+    """
     data = request.json
     user_answer = data.get("answer")
     correct_answer = data.get("correct_answer")
@@ -45,12 +73,25 @@ def check_answer():
 
 @controllers.route('/save_result', methods=['POST'])
 def save_result():
+    """
+    Сохраняет результаты попыток пользователя в текстовый файл на сервере.
+
+    Ожидает JSON с параметрами:
+        table (str): текст таблицы с результатами.
+        surname (str): фамилия пользователя.
+        comment (str): комментарий пользователя.
+        time (str): время сохранения.
+
+    Returns:
+        JSON:
+            status (str): "ok" при успешном сохранении.
+            filename (str): имя сохранённого файла.
+    """
     data = request.json
     table = data.get('table')
     surname = data.get('surname')
     comment = data.get('comment')
     time = data.get('time')
-    # Формируем содержимое: таблица + строка с временем, фамилией и комментарием
     content = f"{table}\n{time}\t{surname}\t{comment}\n"
     os.makedirs('results', exist_ok=True)
     filename = f"{surname}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
@@ -62,4 +103,13 @@ def save_result():
 
 @controllers.route('/download_result/<filename>')
 def download_result(filename):
+    """
+    Позволяет скачать ранее сохранённый файл с результатами.
+
+    Args:
+        filename (str): имя файла для скачивания.
+
+    Returns:
+        Файл для скачивания
+    """
     return send_from_directory('results', filename, as_attachment=True)

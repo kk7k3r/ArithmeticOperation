@@ -30,20 +30,16 @@ class RandomExpressionGenerator:
            - внутренние узлы — операции
            - листья — числа в случайной системе счисления
            """
-        # Если достигнута максимальная глубина — создаём число
         if depth > self.max_depth:
             return Node(self.get_random_number())
 
-        # Создаём узел с операцией
         node = Node(self.get_random_operation())
 
-        # Левый потомок
         if random.choice(['operation', 'number']) == 'operation' and depth < self.max_depth:
             node.left = self.generate_expression_tree(depth + 1)
         else:
             node.left = Node(self.get_random_number())
 
-        # Правый потомок
         if random.choice(['operation', 'number']) == 'operation' and depth < self.max_depth:
             node.right = self.generate_expression_tree(depth + 1)
         else:
