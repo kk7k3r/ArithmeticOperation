@@ -292,22 +292,41 @@
             if (tries >= 3) tr3.style.display = 'table-row';
         };
 
-        form3.addEventListener('submit', function (e) {
+        form3.addEventListener('submit', async function (e) {
             e.preventDefault();
-            const commentValue = `${name}: ${txtArea.value}`;
-            // Скачиваем комментарий как файл
-            var file = new Blob([commentValue], {type: 'txt'});
-            var a = document.createElement("a"),
-                url = URL.createObjectURL(file);
-            a.href = url;
-            a.download = 'Комментарий.txt';
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(function () {
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-            }, 0);
-            successText.style.display = 'block';
+            const now = new Date();
+            const timeString = now.toLocaleString();
+            const surname = name.split(' ')[0] || name;
+            const commentValue = txtArea.value;
+            let tableText = 'Попытка №\tВаш ответ\tПравильный ответ\tРезультат\n';
+            if (tries >= 1) tableText += `1\t\t${answer1}\t\t${correctAnswer}\t\t\t${result1}\n`;
+            if (tries >= 2) tableText += `2\t\t${answer2}\t\t${correctAnswer}\t\t\t${result2}\n`;
+            if (tries >= 3) tableText += `3\t\t${answer3}\t\t${correctAnswer}\t\t\t${result3}\n`;
+
+            // Отправляем данные на сервер для формирования файла
+            const response = await fetch('/save_result', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    table: tableText,
+                    surname: surname,
+                    comment: commentValue,
+                    time: timeString
+                })
+            });
+            const data = await response.json();
+            if (data.status === "ok") {
+                // Скачиваем файл с сервера
+                const a = document.createElement('a');
+                a.href = `/download_result/${data.filename}`;
+                a.download = data.filename;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(function () {
+                    document.body.removeChild(a);
+                }, 0);
+                successText.style.display = 'block';
+            }
         });
     });
 

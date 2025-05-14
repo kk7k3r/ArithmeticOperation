@@ -4,7 +4,7 @@ from core.node import Node
 
 
 class RandomExpressionGenerator:
-    def __init__(self, max_depth=5):
+    def __init__(self, max_depth=3):
         self.operations = ['+', '-', '*', '/']
         self.max_depth = max_depth  # Максимальная глубина дерева
 
