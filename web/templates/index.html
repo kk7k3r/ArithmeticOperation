@@ -211,6 +211,42 @@
         let answers = ['', '', ''];
         let results = [0, 0, 0];
 
+        btnNext.addEventListener('click', function () {
+            page2.style.display = 'none';
+            page3.style.display = 'block';
+
+            // Заполнение таблицы результатов
+            document.querySelector('.tdAnswer1').textContent = answers[0];
+            document.querySelector('.corrAnswer1').textContent = correctAnswer;
+            document.querySelector('.tdResult1').textContent = results[0];
+
+            if (tries >= 2 && answers[1] !== '') {
+                document.querySelector('.tr2').style.display = 'table-row';
+                document.querySelector('.tdAnswer2').textContent = answers[1];
+                document.querySelector('.corrAnswer2').textContent = correctAnswer;
+                document.querySelector('.tdResult2').textContent = results[1];
+            } else {
+                document.querySelector('.tr2').style.display = 'none';
+                document.querySelector('.tdAnswer2').textContent = '';
+                document.querySelector('.corrAnswer2').textContent = '';
+                document.querySelector('.tdResult2').textContent = '';
+            }
+
+            if (tries >= 3 && answers[2] !== '') {
+                document.querySelector('.tr3').style.display = 'table-row';
+                document.querySelector('.tdAnswer3').textContent = answers[2];
+                document.querySelector('.corrAnswer3').textContent = correctAnswer;
+                document.querySelector('.tdResult3').textContent = results[2];
+            } else {
+                document.querySelector('.tr3').style.display = 'none';
+                document.querySelector('.tdAnswer3').textContent = '';
+                document.querySelector('.corrAnswer3').textContent = '';
+                document.querySelector('.tdResult3').textContent = '';
+            }
+
+            mark.textContent = (results[0] || results[1] || results[2]) ? 1 : 0;
+        });
+
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             name = inputName.value;
