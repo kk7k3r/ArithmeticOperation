@@ -267,6 +267,43 @@
 
             midResult.textContent = data.correct ? 'Правильно' : 'Неправильно';
 
+            if (data.correct) {
+                page2.style.display = 'none';
+                page3.style.display = 'block';
+
+                // Заполняем только использованные попытки
+                tdAnswer1.textContent = answer1;
+                corrAnswer1.textContent = correctAnswer;
+                tdResult1.textContent = result1;
+
+                if (tries >= 2 && answer2 !== '') {
+                    tr2.style.display = 'table-row';
+                    tdAnswer2.textContent = answer2;
+                    corrAnswer2.textContent = correctAnswer;
+                    tdResult2.textContent = result2;
+                } else {
+                    tr2.style.display = 'none';
+                    tdAnswer2.textContent = '';
+                    corrAnswer2.textContent = '';
+                    tdResult2.textContent = '';
+                }
+
+                if (tries >= 3 && answer3 !== '') {
+                    tr3.style.display = 'table-row';
+                    tdAnswer3.textContent = answer3;
+                    corrAnswer3.textContent = correctAnswer;
+                    tdResult3.textContent = result3;
+                } else {
+                    tr3.style.display = 'none';
+                    tdAnswer3.textContent = '';
+                    corrAnswer3.textContent = '';
+                    tdResult3.textContent = '';
+                }
+
+                mark.textContent = (result1 || result2 || result3) ? 1 : 0;
+                return;
+            }
+
             if (counter >= tries) {
                 btnTry1More.disabled = true;
                 btnTry1More.style.background = '#646262';
@@ -275,23 +312,6 @@
             counter++;
         });
 
-        btnNext.onclick = function () {
-            page2.style.display = 'none';
-            page3.style.display = 'block';
-            tdAnswer1.textContent = answer1;
-            tdAnswer2.textContent = answer2;
-            tdAnswer3.textContent = answer3;
-            corrAnswer1.textContent = correctAnswer;
-            corrAnswer2.textContent = correctAnswer;
-            corrAnswer3.textContent = correctAnswer;
-            tdResult1.textContent = result1;
-            tdResult2.textContent = result2;
-            tdResult3.textContent = result3;
-            mark.textContent = (result1 || result2 || result3) ? 1 : 0;
-            if (tries >= 2) tr2.style.display = 'table-row';
-            if (tries >= 3) tr3.style.display = 'table-row';
-        };
-
         form3.addEventListener('submit', async function (e) {
             e.preventDefault();
             const now = new Date();
@@ -299,9 +319,9 @@
             const surname = name.split(' ')[0] || name;
             const commentValue = txtArea.value;
             let tableText = 'Попытка №\tВаш ответ\tПравильный ответ\tРезультат\n';
-            if (tries >= 1) tableText += `1\t\t${answer1}\t\t${correctAnswer}\t\t\t${result1}\n`;
-            if (tries >= 2) tableText += `2\t\t${answer2}\t\t${correctAnswer}\t\t\t${result2}\n`;
-            if (tries >= 3) tableText += `3\t\t${answer3}\t\t${correctAnswer}\t\t\t${result3}\n`;
+            if (answer1 !== '') tableText += `1\t\t${answer1}\t\t${correctAnswer}\t\t\t${result1}\n`;
+            if (tries >= 2 && answer2 !== '') tableText += `2\t\t${answer2}\t\t${correctAnswer}\t\t\t${result2}\n`;
+            if (tries >= 3 && answer3 !== '') tableText += `3\t\t${answer3}\t\t${correctAnswer}\t\t\t${result3}\n`;
 
             // Отправляем данные на сервер для формирования файла
             const response = await fetch('/save_result', {
@@ -316,7 +336,6 @@
             });
             const data = await response.json();
             if (data.status === "ok") {
-                // Скачиваем файл с сервера
                 const a = document.createElement('a');
                 a.href = `/download_result/${data.filename}`;
                 a.download = data.filename;
