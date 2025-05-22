@@ -21,23 +21,18 @@ class ExpressionRenderer:
         if expression_tree is None:
             return ''
 
-        # Если это число (лист дерева)
         if not isinstance(expression_tree.value,
                           str) or expression_tree.value not in ExpressionRenderer.OPERATOR_PRECEDENCE:
             return ExpressionRenderer.render_based_number(expression_tree.value)
 
-        # Текущий оператор
         current_op = expression_tree.value
         current_precedence = ExpressionRenderer.OPERATOR_PRECEDENCE.get(current_op, 0)
 
-        # Рекурсивный разбор поддеревьев
         left_expr = ExpressionRenderer.render(expression_tree.left, current_precedence)
         right_expr = ExpressionRenderer.render(expression_tree.right, current_precedence)
 
-        # Формируем выражение без скобок
         expr = f"{left_expr} {current_op} {right_expr}"
 
-        # Добавляем скобки, если нужно по приоритету
         if current_precedence < parent_precedence:
             return f"({expr})"
         return expr

@@ -5,16 +5,20 @@ from core.node import Node
 
 class RandomExpressionGenerator:
     def __init__(self, max_depth=3):
+        """
+            Args:
+                max_depth (int): Максимальная глубина дерева выражения.
+        """
         self.operations = ['+', '-', '*', '/']
         self.max_depth = max_depth  # Максимальная глубина дерева
 
     def get_random_operation(self):
-        """Получение случайной операции"""
+        """Генерация случайной операции"""
         return random.choice(self.operations)
 
     @staticmethod
     def get_random_number():
-        """Получение случайного числа"""
+        """Генерация случайного числа"""
         base = random.randint(2, 10)
         value = random.randint(-100, 100)
         return BasedNumber.from_decimal(value, base)

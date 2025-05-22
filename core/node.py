@@ -1,5 +1,14 @@
 ﻿class Node:
-    """Класс для представления узла дерева"""
+    """
+        Создаёт объект BasedNumber из десятичного числа и основания.
+
+        Args:
+            value (int): Значение в десятичной системе.
+            base (int): Основание системы счисления.
+
+        Returns:
+            BasedNumber: Число в заданной системе.
+        """
 
     def __init__(self, value=None):
         self.value = value
