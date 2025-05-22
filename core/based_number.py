@@ -19,15 +19,18 @@
         val1, val2 = self.convert_values(other)
         if val2 == 0:
             raise ZeroDivisionError("Деление на ноль невозможно.")
-        return BasedNumber(val1 / val2, 10)
+        return BasedNumber(val1 // val2, 10)
 
     def convert_values(self, other):
         return [self.to_decimal(), other.to_decimal()]
 
     def to_decimal(self):
-        if self.base != 10 or isinstance(self.value, str):
-            return int(str(self.value), int(self.base))
-        return self.value
+        val_str = str(self.value)
+        negative = val_str.startswith('-')
+        val_str = val_str[1:] if negative else val_str
+
+        decimal_value = int(val_str, self.base)
+        return -decimal_value if negative else decimal_value
 
     @staticmethod
     def from_decimal(value: int, base: int):
