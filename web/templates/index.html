@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Арифметика</title>
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+        type="text/css">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
 <div class="container">
     <div id="page1" class="page1">
-        <h1 class="h1">Арифметические операции</h1>
-        <form id="form1" class="form">
+        <h3>Проект в УрФУ по дисциплине "Компьютерная арифметика"</h3>
+        <h1>Арифметические операции над битовыми данными</h1>
+        <form class="form" action="" method="get">
             <label class="inputLabel">Введите ваше ФИО:
                 <input class="inputName" type="text" name="name" required>
             </label>
-            <label class="inputLabel">Введите кол-во прогонов:
+            <label class="inputLabel">Введите кол-во попыток:
                 <input class="inputTries" type="number" step="any" name="tries" required min="1" max="3">
             </label>
             <button type="submit">Далее</button>
@@ -22,52 +27,53 @@
     <div id="page2" class="page2">
         <h2 class="h2">Задача</h2>
         <p class="dividingOnZero" style="font-size: 18px; color: #666;">Обнаружено деление на 0</p>
-        <form class="form2" id="form2" action="" method="get">
+        <form class="form2" action="" method="get">
             <span class="midResult"></span>
             <p class="field">
                 <span class="equation"></span>
                 &nbsp;=&nbsp;<input class="answer" type="number"><sub class="subValue3">1</sub>
             </p>
-            <div style="display: flex; justify-content: center; column-gap: 5px;">
+            <div>
+            <!-- <div style="display: flex; justify-content: center; column-gap: 5px;"> -->
                 <button class="btnTry1More" type="submit">Ещё раз</button>
                 <button class="btnNext" style="display: none;" type="button">Далее</button>
             </div>
         </form>
     </div>
     <div id="page3" class="page3">
-        <h2 class="h2">Результаты</h2>
-        <table border="10" id="resultsTable" style="margin-bottom: 10px;">
+        <h2>Результаты</h2>
+        <table class="table">
             <thead>
-            <th class="tryNumber">Попытка №</th>
-            <th class="userAnswer">Ваш ответ</th>
-            <th class="correctAnswer">Правильный ответ</th>
-            <th class="result">Результат</th>
+                <th class="tryNumber">Попытка №</th>
+                <th class="userAnswer">Ваш ответ</th>
+                <th class="correctAnswer">Правильный ответ</th>
+                <th class="result">Результат</th>
             </thead>
             <tbody>
-            <tr class="tr1">
-                <td class="tdNumber1">1</td>
-                <td class="tdAnswer1">0</td>
-                <td class="corrAnswer1">0</td>
-                <td class="tdResult1">0</td>
-            </tr>
-            <tr class="tr2" style="display: none;">
-                <td class="tdNumber2">2</td>
-                <td class="tdAnswer2">0</td>
-                <td class="corrAnswer2">0</td>
-                <td class="tdResult2">0</td>
-            </tr>
-            <tr class="tr3" style="display: none;">
-                <td class="tdNumber3">3</td>
-                <td class="tdAnswer3">0</td>
-                <td class="corrAnswer3">0</td>
-                <td class="tdResult3">0</td>
-            </tr>
+                <tr class="tr1">
+                    <td class="tdNumber1">1</td>
+                    <td class="tdAnswer1">0</td>
+                    <td class="corrAnswer1">0</td>
+                    <td class="tdResult1">0</td>
+                </tr>
+                <tr class="tr2" style="display: none;">
+                    <td class="tdNumber2">2</td>
+                    <td class="tdAnswer2">0</td>
+                    <td class="corrAnswer2">0</td>
+                    <td class="tdResult2">0</td>
+                </tr>
+                <tr class="tr3" style="display: none;">
+                    <td class="tdNumber3">3</td>
+                    <td class="tdAnswer3">0</td>
+                    <td class="corrAnswer3">0</td>
+                    <td class="tdResult3">0</td>
+                </tr>
             </tbody>
         </table>
         <p>Оценка: <span class="mark"></span></p>
         <form class="form3" action="" method="get" style="display: flex; ">
             <label class="inputLabel" style="display: flex;">
-                Напишите комментарий:
+                Напишите комментарий: 
                 <textarea class="txtArea" name="" id="" cols="30" rows="10"></textarea>
             </label>
             <p class="success-after-save-comment">Файл сохранён</p>
@@ -76,287 +82,4 @@
     </div>
 </div>
 </body>
-<style>
-
-    .container {
-        padding: 10px;
-        min-height: 170px;
-        max-width: 380px;
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 15%;
-        text-align: center;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    .form,
-    .form3 {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    #page2,
-    #page3 {
-        display: none;
-    }
-
-    .h1 {
-        font-size: 2.5em;
-        font-weight: 100;
-        color: #292929;
-    }
-
-    .inputName {
-        width: 40%;
-        height: 24px;
-        color: #292929;
-    }
-
-    .inputTries {
-        width: 20%;
-        height: 24px;
-        color: #292929;
-    }
-
-    button {
-        margin-top: 2%;
-        width: 100px;
-        height: 40px;
-        margin-left: auto;
-        margin-right: auto;
-        background: #4078e1;
-        color: aliceblue;
-        border: #4078e1;
-        font-size: 1em;
-    }
-
-    .inputLabel {
-        font-size: 1.5em;
-        font-weight: 100;
-        color: #292929;
-    }
-
-    .h2 {
-        font-size: 2.0em;
-        font-weight: 100;
-        color: #292929;
-    }
-
-    p {
-        font-size: 1.5em;
-        color: #292929;
-    }
-
-    .answer {
-        height: 24px;
-        color: #292929;
-        width: 120px;
-    }
-
-    td {
-        padding: 10px;
-        border: 1px solid #4078e1;
-        font-size: 1em;
-    }
-
-    table {
-        border: 3px solid #4078e1;
-        border-collapse: collapse;
-        font-size: 1em;
-        color: #292929;
-    }
-
-    th {
-        border: 1px solid #4078e1;
-        font-size: 1em;
-    }
-
-    .txtArea {
-        resize: vertical;
-    }
-
-    .success-after-save-comment {
-        display: none;
-    }
-
-    .dividingOnZero {
-        display: none;
-    }
-</style>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const form = document.querySelector('.form'),
-            form2 = document.querySelector('.form2'),
-            form3 = document.querySelector('.form3'),
-            page1 = document.querySelector('#page1'),
-            page2 = document.querySelector('#page2'),
-            page3 = document.querySelector('#page3'),
-            inputName = document.querySelector('.inputName'),
-            inputTries = document.querySelector('.inputTries'),
-            inputAnswer = document.querySelector('.answer'),
-            btnTry1More = document.querySelector('.btnTry1More'),
-            btnNext = document.querySelector('.btnNext'),
-            midResult = document.querySelector('.midResult'),
-            equationText = document.querySelector('.equation'),
-            subValue3 = document.querySelector('.subValue3'),
-            mark = document.querySelector('.mark'),
-            txtArea = document.querySelector('.txtArea'),
-            successText = document.querySelector('.success-after-save-comment');
-
-        let name = '', tries = 0, counter = 1, correctAnswer = '';
-        let answers = ['', '', ''];
-        let results = [0, 0, 0];
-
-        btnNext.addEventListener('click', function () {
-            page2.style.display = 'none';
-            page3.style.display = 'block';
-
-            // Заполнение таблицы результатов
-            document.querySelector('.tdAnswer1').textContent = answers[0];
-            document.querySelector('.corrAnswer1').textContent = correctAnswer;
-            document.querySelector('.tdResult1').textContent = results[0];
-
-            if (tries >= 2 && answers[1] !== '') {
-                document.querySelector('.tr2').style.display = 'table-row';
-                document.querySelector('.tdAnswer2').textContent = answers[1];
-                document.querySelector('.corrAnswer2').textContent = correctAnswer;
-                document.querySelector('.tdResult2').textContent = results[1];
-            } else {
-                document.querySelector('.tr2').style.display = 'none';
-                document.querySelector('.tdAnswer2').textContent = '';
-                document.querySelector('.corrAnswer2').textContent = '';
-                document.querySelector('.tdResult2').textContent = '';
-            }
-
-            if (tries >= 3 && answers[2] !== '') {
-                document.querySelector('.tr3').style.display = 'table-row';
-                document.querySelector('.tdAnswer3').textContent = answers[2];
-                document.querySelector('.corrAnswer3').textContent = correctAnswer;
-                document.querySelector('.tdResult3').textContent = results[2];
-            } else {
-                document.querySelector('.tr3').style.display = 'none';
-                document.querySelector('.tdAnswer3').textContent = '';
-                document.querySelector('.corrAnswer3').textContent = '';
-                document.querySelector('.tdResult3').textContent = '';
-            }
-
-            mark.textContent = (results[0] || results[1] || results[2]) ? 1 : 0;
-        });
-
-        form.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            name = inputName.value;
-            tries = parseInt(inputTries.value);
-            const response = await fetch('/generate', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({name, tries})
-            });
-            const data = await response.json();
-            equationText.innerHTML = data.equation;
-            correctAnswer = data.correctAnswer;
-            subValue3.textContent = data.base;
-            page1.style.display = 'none';
-            page2.style.display = 'block';
-        });
-
-        form2.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            let userAnswer = inputAnswer.value;
-            answers[counter - 1] = userAnswer;
-
-            const response = await fetch('/check_answer', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({answer: userAnswer, correct_answer: correctAnswer})
-            });
-            const data = await response.json();
-
-            results[counter - 1] = data.correct ? 1 : 0;
-            midResult.textContent = data.correct ? 'Правильно' : 'Неправильно';
-
-            if (data.correct) {
-                page2.style.display = 'none';
-                page3.style.display = 'block';
-
-                document.querySelector('.tdAnswer1').textContent = answers[0];
-                document.querySelector('.corrAnswer1').textContent = correctAnswer;
-                document.querySelector('.tdResult1').textContent = results[0];
-
-                if (tries >= 2 && answers[1] !== '') {
-                    document.querySelector('.tr2').style.display = 'table-row';
-                    document.querySelector('.tdAnswer2').textContent = answers[1];
-                    document.querySelector('.corrAnswer2').textContent = correctAnswer;
-                    document.querySelector('.tdResult2').textContent = results[1];
-                } else {
-                    document.querySelector('.tr2').style.display = 'none';
-                    document.querySelector('.tdAnswer2').textContent = '';
-                    document.querySelector('.corrAnswer2').textContent = '';
-                    document.querySelector('.tdResult2').textContent = '';
-                }
-
-                if (tries >= 3 && answers[2] !== '') {
-                    document.querySelector('.tr3').style.display = 'table-row';
-                    document.querySelector('.tdAnswer3').textContent = answers[2];
-                    document.querySelector('.corrAnswer3').textContent = correctAnswer;
-                    document.querySelector('.tdResult3').textContent = results[2];
-                } else {
-                    document.querySelector('.tr3').style.display = 'none';
-                    document.querySelector('.tdAnswer3').textContent = '';
-                    document.querySelector('.corrAnswer3').textContent = '';
-                    document.querySelector('.tdResult3').textContent = '';
-                }
-
-                mark.textContent = (results[0] || results[1] || results[2]) ? 1 : 0;
-                return;
-            }
-
-            if (counter >= tries) {
-                btnTry1More.disabled = true;
-                btnTry1More.style.background = '#646262';
-                btnNext.style.display = 'block';
-            }
-            counter++;
-        });
-
-        form3.addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const now = new Date();
-            const timeString = now.toLocaleString();
-            const surname = name.split(' ')[0] || name;
-            const commentValue = txtArea.value;
-            let tableText = 'Попытка №\tВаш ответ\tПравильный ответ\tРезультат\n';
-            if (answers[0] !== '') tableText += `1\t\t${answers[0]}\t\t${correctAnswer}\t\t\t${results[0]}\n`;
-            if (tries >= 2 && answers[1] !== '') tableText += `2\t\t${answers[1]}\t\t${correctAnswer}\t\t\t${results[1]}\n`;
-            if (tries >= 3 && answers[2] !== '') tableText += `3\t\t${answers[2]}\t\t${correctAnswer}\t\t\t${results[2]}\n`;
-
-            const response = await fetch('/save_result', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({
-                    table: tableText,
-                    surname: surname,
-                    comment: commentValue,
-                    time: timeString
-                })
-            });
-            const data = await response.json();
-            if (data.status === "ok") {
-                const a = document.createElement('a');
-                a.href = `/download_result/${data.filename}`;
-                a.download = data.filename;
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(function () {
-                    document.body.removeChild(a);
-                }, 0);
-                successText.style.display = 'block';
-            }
-        });
-    });
-</script>
 </html>
